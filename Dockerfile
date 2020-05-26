@@ -1,7 +1,18 @@
-FROM golang
+FROM golang:1.13-alpine3.10 AS builder
 
-ADD . /go/src/github.com/Zetkolink/traffic_sniffer
+WORKDIR /go/src/gihub.com/Zetkolink/traffic_sniffer
+COPY . .
 
-RUN go install github.com/Zetkolink/traffic_sniffer
+RUN apk add --update gcc libc-dev libpcap-dev
 
-ENTRYPOINT /go/bin/traffic_sniffer
+RUN go install
+
+FROM alpine:3.10
+
+RUN apk add --no-cache libc-dev libpcap-dev
+
+COPY --from=builder /go/bin /usr/bin/
+
+ENV DEVICE="lo"
+
+CMD [ "/usr/bin/traffic_sniffer" ]

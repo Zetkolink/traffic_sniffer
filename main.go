@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"os"
 	"os/signal"
@@ -9,11 +8,13 @@ import (
 )
 
 func main() {
-	device := flag.String("device", "lo", "What device traffic to sniff.")
+	device := os.Getenv("DEVICE")
 
-	flag.Parse()
+	if device == "" {
+		device = "lo"
+	}
 
-	srv, err := NewSniffer(*device)
+	srv, err := NewSniffer(device)
 
 	if err != nil {
 		log.Fatal(err.Error())
