@@ -4,7 +4,6 @@ Sniff TCP/IP packets in 443 port
 
 Example run:
   - go build
-  - export DEVICE=eth0
   - sudo ./traffic_sniffer
 
 Docker run:
